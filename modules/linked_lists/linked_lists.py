@@ -113,5 +113,81 @@ def find_mid(lst):
         
 
 
+# Challenge 8: Remove Duplicates
+# Time: O(n) as we iterate through all nodes and do an O(1) lookup in a hashmap at each node
+def remove_duplicates(lst):
+    if lst.is_empty():
+        return False
     
+    dup_dict = {}
+    prev_node = lst.get_head()
+    dup_dict[str(prev_node.data)] = True
+    cur_node = prev_node.next_element
+    while cur_node:
+        if not dup_dict.get(str(cur_node.data)):
+            dup_dict[str(cur_node.data)] = True
+            prev_node.next_element = cur_node
+            prev_node = cur_node
+            print(str(cur_node.data) + " doesn't exist, incrementing previous node")
+        else: 
+            print(str(cur_node.data) + " exists, skipping")
+            prev_node.next_element = cur_node.next_element
 
+        cur_node = cur_node.next_element
+
+    return lst
+
+# Time: O(n)
+def get_tail_node(lst):
+    cur_node = lst.get_head()
+    while cur_node.next_element:
+        cur_node = cur_node.next_element
+    return cur_node
+
+# Challenge 9(a): Union of Linked Lists
+# Time: O(2(n+m)) as we are first iterating the first list to find the tail, and then iterating the second list to add its nodes to the tail, and then removing duplicates from the combined lists
+def union(list1, list2):
+    # Link both lists
+    get_tail_node(list1).next_element = list2.get_head()
+    # Remove duplicates and return
+    return remove_duplicates(list1)
+
+# Challenge 9(b): Intersection of Linked Lists
+# Time: O(n + m) for removing duplicates, O(n*m) for finding intersections
+def intersection(list1, list2):
+    # remove duplicates from both lists
+    list1 = remove_duplicates(list1)
+    list2 = remove_duplicates(list2)
+    if not list1 or not list2:
+        return None
+    # Iterate through list1 and compare each node with all nodes in list 2
+    # if the node doesn't exist in list2 aswell, delete it from the list
+    prev_node = list1.get_head()
+    cur_node = prev_node.next_element
+    while cur_node:
+        if not list2.search(cur_node.data):
+            prev_node.next_element = cur_node.next_element
+        prev_node = cur_node
+        cur_node = cur_node.next_element
+
+    return list1
+
+
+# Challenge 10: Return Nth node from End
+# Time: O(n) to reverse the list, O(n) to iterate n nodes from the end (now start)
+### SHOULD HAVE USED LENGTH AND SUBTRACTED N RATHER THAN REVERSE!
+def find_nth(lst, n):
+    # reverse lst
+    lst = reverse(lst)
+    lst.print_list()
+    print(n)
+    count = 1
+    cur_node = lst.get_head()
+    # while count < n iterate through nodes, if count > n, return -1
+    while count < n:
+        if cur_node.next_element:
+            cur_node = cur_node.next_element
+        else:
+            return -1
+        count += 1
+    return cur_node.data
