@@ -105,9 +105,37 @@ def find_first_unique(lst):
                 return lst[i]
     return False       
 
+# Challenge 8: Right Rotate List
+# Time: O(n) as we iterate the whole list
+def right_rotate(lst, k):
+    # initialise a new list with dummy values
+    new_lst = [None] * len(lst)
+
+    new_lst = [None] * len(lst)
+    for i in range(len(lst)):
+        if i+k < len(lst):
+            new_lst[i+k] = lst[i]
+        else:
+            new_lst[int((i+k)%len(lst))] = lst[i]
+    return new_lst
+        
+# Challenge 9: Rearrange Positive and Negative Values
+# Approach: Two pointers? One going from front of list stopping on positives and a second going from back stopping on negatives
+# When both pointers are stopped, swap their values and proceed
+def rearrange(lst):
+    neg_index = 0
+    pos_index = len(lst)-1
+
+    for i in range(len(lst)):
+        front_val = lst[neg_index]
+        rear_val = lst[pos_index]
+
+        if front_val >= 0:
+            # found a pos, leave pointer here
+            pass
+        if rear_val < 0:
+            # found a neg, leave pointer here
+            pass
 
 if __name__ == "__main__":
-    start = timer()
-    print(find_product([24,12,8,6]));
-    end = timer()
-    print("^ executed in " + str(end-start))
+   print(right_rotate([10,20,30,40,50], 3))
