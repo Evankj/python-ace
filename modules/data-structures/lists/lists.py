@@ -122,20 +122,89 @@ def right_rotate(lst, k):
 # Challenge 9: Rearrange Positive and Negative Values
 # Approach: Two pointers? One going from front of list stopping on positives and a second going from back stopping on negatives
 # When both pointers are stopped, swap their values and proceed
+# Time: O(n) as we iterate through the whole list from both ends (but stop when pointers meet)
 def rearrange(lst):
     neg_index = 0
     pos_index = len(lst)-1
 
-    for i in range(len(lst)):
+
+    while neg_index < pos_index:
         front_val = lst[neg_index]
         rear_val = lst[pos_index]
+        if front_val < 0:
+            # didn't find a pos, increment pointer
+            neg_index += 1
+        if rear_val >= 0:
+            # didn't find a neg, decrement pointer
+            pos_index -= 1
 
-        if front_val >= 0:
-            # found a pos, leave pointer here
-            pass
-        if rear_val < 0:
-            # found a neg, leave pointer here
-            pass
+        if front_val >= 0 and rear_val < 0:
+            # we need to swap these values and inc/dec both pointers
+            lst[neg_index] = rear_val
+            lst[pos_index] = front_val
+            neg_index += 1
+            pos_index -= 1
+
+    return lst
+
+# Challenge 10: Rearrange Sorted List in Max/Min Form
+# Approach: even indices will be descending, odd incices will be ascending.
+# odd = 0 = len - 1, 2 = len - 3, len - 5 
+# even = 1, 3, 5
+def max_min(lst):
+    if len(lst) <= 0:
+        return lst
+
+    start_index = 0
+    end_index = len(lst)-1
+    max_val = lst[end_index]
+    min_val = lst[start_index]
+    for i in range(len(lst)):
+        # Even = Descending
+        if i % 2 == 0:
+            lst[i] = max_val
+            end_index -= 2
+            max_val = lst[end_index]
+        else:
+            lst[i] = min_val
+            start_index += 2
+            min_val = lst[start_index]
+        return lst   
+
+# Challenge 11: Maximum Sum Sublist
+# Approach: Sliding window -> check 1st elem, store as max sum, check 1st + 2nd, if greater, store as max sum, else drop first elem, check just 2nd elem, if greater store as sum, else check 2nd + 3rd and continue 
+def find_max_sum_sublist(lst):
+    print(lst)
+    if len(lst) <= 0:
+        return lst
+
+    window_start_index = 0
+    window_end_index = 0
+    max_sum = lst[0]
+    cur_sum = max_sum
+
+    for i in range(len(lst)):
+        print('''
+
+            Sum: {0}
+            Start Index: {1}
+            End Index: {2}
+            Contains: {3}
+
+
+        '''.format(cur_sum, window_start_index, window_end_index, lst[window_start_index:window_end_index+1]))
+        if cur_sum <= max_sum:
+            window_end_index += 1
+            cur_sum+=lst[window_end_index]
+            print("Added " + str(lst[window_end_index]))
+        else:
+            cur_sum-=lst[window_start_index]
+            print("Subtracted " + str(lst[window_start_index]))
+            window_start_index += 1
+            max_sum = cur_sum
+    return max_sum
+
+
 
 if __name__ == "__main__":
    print(right_rotate([10,20,30,40,50], 3))
