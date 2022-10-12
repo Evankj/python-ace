@@ -110,8 +110,6 @@ def find_first_unique(lst):
 def right_rotate(lst, k):
     # initialise a new list with dummy values
     new_lst = [None] * len(lst)
-
-    new_lst = [None] * len(lst)
     for i in range(len(lst)):
         if i+k < len(lst):
             new_lst[i+k] = lst[i]
