@@ -92,31 +92,65 @@ def inorder_iterative(root):
 
     print(result, end="") 
 
-# Challenge 4: In-order Successor of Binary Search Tree
-def find_inorder_successor(root, node_value):
+def find_lowest(root):
+    while root:
+        root = root.left
 
+ 
+
+def get_lowest_node(root):
+    # if no root, return none
+    if not root:
+        return None
+
+    node = root
+    left = node.left
+    right = node.right
+    while left or right:
+        # while node has children
+        # if node has a left child, set node to left, if not, set node to right
+        # if node has no children, exit loop and return node
+        if left:
+            node = left
+        else:
+            if right:
+                node = right
+        left = node.left
+        right = node.right
+
+    return node
+
+# Challenge 4: In-order Successor of Binary Search Tree
+# This is a BST not just a Binary Tree, therefore "the in-order successor of a node in a BST is the node with the smallest 
+# key greater than the key of the current node. This is the same as the next node in an in-order traversal of the BST."
+def find_inorder_successor(root, node_value):
+    value = -1
     return None
 
-# Challenge 6: Level Order Traversal of Binary Tree (BFS)
-def level_order_traversal(root):
-    result = ""
-    
-    if not root or (not root.left and not root.right):
-        # result = str(root.data)
-        print(result, end="")
-        return
 
+
+# Challenge 5: In-order Successor Binary Search Tree With Parent Pointers
+def find_inorder_successor(root, predecessor_data)
+def get_lowest_left_val(root):
+    while root:
+        root = root.left
+    return root
+
+
+
+# Challenge 7: Reverse Level Order Traversal
+# Apprach: Use a stack and dummy node
+def traverse(root):
+    if not root:
+        return None
+
+    result = []
+    visited_stack = []
     queue = [root]
-
     while len(queue) > 0:
-        # Items in the queue are a "level"
-        next_queue = []
-        for node in queue:
-            result += str(node.data) + ', '
-            if node.left:
-                next_queue.append(node.left)
-            if node.right:
-                next_queue.append(node.right)
-        queue = next_queue
+        node = queue.pop
+        pass
 
-    print(result, end="")
+
+
+    return result
