@@ -1,4 +1,5 @@
 from Graph import Graph
+from directed_graph import DirectedGraph
 from Queue import MyQueue
 from Stack import MyStack
 
@@ -122,3 +123,82 @@ def check_path(g, source, destination):
             vertex = vertex.next_element
     return False
 
+# Challenge 7: Check if a Given Undirected Graph is a Tree or not
+# Approach: DFS from all vertices. If we find a 
+# Issue: How do we know where to start? It seems inefficient to iterate through all vertices until we find one where all nodes are visited via BFS/DFS
+def dfs_check(g, source, visited):
+    stack = MyStack()
+    stack.push(source)
+    while not stack.is_empty():
+        visit = stack.pop()
+        visited[visit] = True
+        visit = g.array[visit].get_head()
+        while visit:
+            stack.push(visit.data)
+            visit = visit.next_element
+    return visited
+
+def is_tree(g):
+    if g.vertices <= 0:
+        return False
+
+    visited = [False] * g.vertices
+
+
+    for i in range(g.vertices):
+        # if we haven't visited a node yet, conduct a DFS from it
+        if not visited[i]:
+            visited = dfs_check(g, i, visited)
+
+    # Now check if all nodes have been visited
+    return visited.count(False) <= 0
+
+
+# Challenge 8: Find the Shortest Path Between Two Vertices
+def find_min(g, source, destination):
+    stack = MyStack()
+    stack.push(source)
+    shortest_path_edge_count = int('inf')
+    edge_count = 0
+    while not stack.is_empty():
+        visit = g.array[stack.pop()]
+        vertex = visit.get_head()
+        edge_count += 1
+        while vertex:
+            if vertex.data == destination:
+                if edge_count < shortest_path_edge_count:
+                    shortest_path_edge_count = edge_count
+            stack.push(vertex.data)
+            vertex = vertex.next_element
+    return False
+
+# Challenge 9: Clone a Directed Graph
+# Not a good approach, potentially O(n^2) or worse with the "find_vertex_by_data" calls...
+def clone(graph):
+  if len(graph.nodes) <= 0:
+    return None
+
+  # Clone nodes
+  clone_graph = DirectedGraph()
+  nodes = graph.nodes
+  for node in nodes:
+    clone_graph.add_vertex(node.data)
+
+
+  # Hashmap to keep record of visited nodes
+  nodes_completed = {}
+  # Creating new graph
+  first_node = graph.nodes[0].data 
+  stack = [first_node]
+  # nodes_completed[first_node] = True
+  # dfs to clone edges
+  while len(stack) > 0:
+    node = stack.pop()
+    if not nodes_completed.get(node, False):
+      neighbors = graph.find_vertex_by_data(node).neighbors
+      for neighbor in neighbors:
+        stack.append(neighbor.data)
+        clone_graph.add_edge(node, neighbor.data)
+      nodes_completed[node] = True
+  # Return deep copied graph
+  return clone_graph
